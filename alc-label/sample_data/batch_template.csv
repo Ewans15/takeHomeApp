@@ -1,0 +1,4 @@
+filename,brand_name,class_type,alcohol_content,net_contents,government_warning
+old_tom_correct.jpg,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,
+old_tom_lowercase.jpg,Old Tom Distillery,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,
+old_tom_bad_warning.jpg,OLD TOM DISTILLERY,Kentucky Straight Bourbon Whiskey,45% Alc./Vol. (90 Proof),750 mL,

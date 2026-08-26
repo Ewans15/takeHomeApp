@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>App Prototype — Alcohol Label Verification</title>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <div class="brandmark">
+          <span class="brandmark-glyph" aria-hidden="true">&#127866;</span>
+          <div>
+            <p class="eyebrow">Sylvester E</p>
+            <h1>App Prototype</h1>
+          </div>
+        </div>
+        <p class="tagline">
+          Prototype app to check alcohol labels against forms to see if they
+          pass inspections
+        </p>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <nav class="mode-switch" role="tablist" aria-label="Verification mode">
+        <button
+          type="button"
+          class="mode-btn is-active"
+          data-mode="single"
+          role="tab"
+          aria-selected="true"
+        >
+          Single Label
+        </button>
+        <button
+          type="button"
+          class="mode-btn"
+          data-mode="batch"
+          role="tab"
+          aria-selected="false"
+        >
+          Batch Upload
+        </button>
+      </nav>
+
+      <!--  SINGLE MODE  -->
+      <section id="panel-single" class="panel is-active">
+        <div class="grid-2">
+          <form id="single-form" class="card" autocomplete="off">
+            <h2>1. What the paperwork says</h2>
+
+            <label class="field">
+              <span>Brand Name</span>
+              <input
+                type="text"
+                name="brand_name"
+                placeholder="e.g. Old Tom Distillery"
+                required
+              />
+            </label>
+
+            <label class="field">
+              <span>Class / Type</span>
+              <input
+                type="text"
+                name="class_type"
+                placeholder="e.g. Kentucky Straight Bourbon Whiskey"
+                required
+              />
+            </label>
+
+            <div class="field-row">
+              <label class="field">
+                <span>Alcohol Content</span>
+                <input
+                  type="text"
+                  name="alcohol_content"
+                  placeholder="e.g. 45% Alc./Vol. (90 Proof)"
+                  required
+                />
+              </label>
+              <label class="field">
+                <span>Net Contents</span>
+                <input
+                  type="text"
+                  name="net_contents"
+                  placeholder="e.g. 750 mL"
+                  required
+                />
+              </label>
+            </div>
+
+            <label class="field">
+              <span
+                >Government Warning
+                <em
+                  >(leave as-is to check against the standard federal text)</em
+                ></span
+              >
+              <textarea name="government_warning" rows="5">
+{{ standard_warning }}</textarea
+              >
+            </label>
+
+            <label class="field field-file">
+              <span>2. Label photo</span>
+              <input type="file" name="label_image" accept="image/*" required />
+              <span class="file-hint"
+                >JPG or PNG. A clear, well-lit, front-on photo works best.</span
+              >
+            </label>
+
+            <button type="submit" class="btn-primary">Verify Label</button>
+          </form>
+
+          <div class="card results-card">
+            <h2>Result</h2>
+            <div id="single-status" class="status-idle">
+              Fill in the form and upload a photo to check it.
+            </div>
+            <div id="single-spinner" class="spinner-wrap hidden">
+              <div class="spinner" aria-hidden="true"></div>
+              <p>Reading the label…</p>
+            </div>
+            <div id="single-results" class="results-list"></div>
+            <details id="single-raw-wrap" class="raw-ocr hidden">
+              <summary>Raw text the app read off the label</summary>
+              <pre id="single-raw-text"></pre>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- BATCH MODE -->
+      <section id="panel-batch" class="panel">
+        <div class="card">
+          <h2>Batch verification</h2>
+          <p class="muted">
+            Upload several label photos at once, plus one CSV listing the
+            expected field values for each (matched by exact filename). The CSV
+            is read right here in your browser and each photo is checked
+            individually, so results start appearing before the whole batch
+            finishes.
+          </p>
+          <p>
+            <a href="/sample_csv" download>Download a sample CSV template</a>
+          </p>
+
+          <form id="batch-form" class="batch-form" autocomplete="off">
+            <label class="field field-file">
+              <span>Label photos</span>
+              <input
+                type="file"
+                name="label_images"
+                accept="image/*"
+                multiple
+                required
+              />
+            </label>
+            <label class="field field-file">
+              <span>Batch CSV</span>
+              <input type="file" name="batch_csv" accept=".csv" required />
+            </label>
+            <button type="submit" class="btn-primary">Verify Batch</button>
+          </form>
+
+          <div id="batch-status" class="status-idle"></div>
+          <div id="batch-spinner" class="spinner-wrap hidden">
+            <div class="spinner" aria-hidden="true"></div>
+            <p>Working through the batch…</p>
+          </div>
+          <div id="batch-results"></div>
+        </div>
+      </section>
+
+      <footer class="footnote">
+        <p>
+          The single upload is just to show how the app works, to increase speed
+          instead of typing all fields, use batch upload with form fields
+          already produced in a csv file(Microsoft Excel/Google Sheets)
+        </p>
+      </footer>
+    </main>
+
+    <template id="field-row-template">
+      <div class="field-result">
+        <span class="verdict-stamp"></span>
+        <div class="field-result-body">
+          <p class="field-result-name"></p>
+          <p class="field-result-detail"></p>
+        </div>
+      </div>
+    </template>
+  </body>
+</html>
