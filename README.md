@@ -44,18 +44,18 @@ result is only "Approved" if every field is a clean Match.
   laid out process. Because of this images are downsized to save on time
   and the OCR engine is baked in with Docker so no API calls which could
   slow down the process
-  - **No Outsource API** Customers network blocks most api calls. Used
-    tesseract for image matching since it doesnt require any API calls and just
-    needs to be downloaded into system. More on tesseract here:
-  - **Handles Batch Uploads** During peak times, customer recieves 200+
-    labels that needs to be verified. Batch uploads would be necessary here.
-    A key assumption for this process is all labels would be in either jpg or png
-    and label details would all be in a csv file with correct matching image file name
-  - **Governement Warning Check(Very Important)** Government warning Must be exactly as is
-    no tiny font, no extra words. Must be bold and capitelized.
-  - **Label details** Another assumption made when building this was label details only
-    consist of 5 details which are Brand name, Class/Type, Alcohol Content,
-    Net Contents, Govenment Warning
+- **No Outsource API** Customers network blocks most api calls. Used
+  tesseract for image matching since it doesnt require any API calls and just
+  needs to be downloaded into system. More on tesseract here:
+- **Handles Batch Uploads** During peak times, customer recieves 200+
+  labels that needs to be verified. Batch uploads would be necessary here.
+  A key assumption for this process is all labels would be in either jpg or png
+  and label details would all be in a csv file with correct matching image file name
+- **Governement Warning Check(Very Important)** Government warning Must be exactly as is
+  no tiny font, no extra words. Must be bold and capitelized.
+- **Label details** Another assumption made when building this was label details only
+  consist of 5 details which are Brand name, Class/Type, Alcohol Content,
+  Net Contents, Govenment Warning
 
 ## Known limitations
 
@@ -67,30 +67,23 @@ result is only "Approved" if every field is a clean Match.
   contrast, and small/stylized fonts all reduce accuracy. The "Review" verdict
   (rather than a false Match or false Mismatch) is the app's way of saying
   "I'm not confident, look at this one yourself."
-  **Type of Image File** Typical real submissions would probably be in
+- **Type of Image File** Typical real submissions would probably be in
   PDF format with multiple views of the label (Front view, back view).
   Currently the app only takes in JPG and PNG files with only one view
   of all content
-  **Language Barrier** Right now the app only works with the english language
+- **Language Barrier** Right now the app only works with the english language
   so labels with different languages or forms with different languages would not
   be processed properly
-  **Batch Upload Format** The batch upload format takes in a single CSV form
+- **Batch Upload Format** The batch upload format takes in a single CSV form
   with image file name and other requirements filled out. If image file names
   arent matched correctly or columns in the csv arent matched correctly, output
   will be wrong
-  **Data Storage** Data is stored nowhere so large uploads have to be processed
+- **Data Storage** Data is stored nowhere so large uploads have to be processed
   right after information is given or user would have to re-upload all data again
   since it would be lost when leaving the app
 - **Net Contents currently requires an exact numeric match**
 
-## Run it — no manual installs required
-
-The app is containerized: Tesseract, its language data, and every Python
-package are baked into the Docker image at build time. Nobody -- not you as
-the developer, and not anyone visiting the deployed site -- ever runs `brew
-install` or `apt-get install` by hand. You need Docker itself installed
-([Docker Desktop](https://www.docker.com/products/docker-desktop/) on
-Mac/Windows, `docker.io` on Linux), and that's it.
+## Run it
 
 ## Project layout
 
