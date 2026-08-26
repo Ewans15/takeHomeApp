@@ -46,7 +46,7 @@ result is only "Approved" if every field is a clean Match.
   slow down the process
 - **No Outsource API** Customers network blocks most api calls. Used
   tesseract for image matching since it doesnt require any API calls and just
-  needs to be downloaded into system. More on tesseract here:
+  needs to be downloaded into system. More on tesseract here:[Tesseract](https://github.com/tesseract-ocr/tesseract)
 - **Handles Batch Uploads** During peak times, customer recieves 200+
   labels that needs to be verified. Batch uploads would be necessary here.
   A key assumption for this process is all labels would be in either jpg or png
@@ -84,6 +84,9 @@ result is only "Approved" if every field is a clean Match.
 - **Net Contents currently requires an exact numeric match**
 
 ## Run it
+
+App is fully hosted on Vercel and can be ran through going to the below link
+[prototype](take-home-app-one.vercel.app)
 
 ## Project layout
 
